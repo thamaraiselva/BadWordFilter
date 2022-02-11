@@ -2,6 +2,8 @@
 
 namespace JCrowe\BadWordFilter;
 
+use Illuminate\Support\Arr;
+
 class BadWordFilter
 {
 
@@ -517,12 +519,14 @@ class BadWordFilter
     {
        	$objTmp = (object)['aFlat' => []];
         
-        $callBack = function(&$v, $k, &$t) {
+       /*  $callBack = function(&$v, $k, &$t) {
 	        $t->aFlat[] = $v;
         };
 
-        array_walk_recursive($array, $callBack, $objTmp);
-
+        array_walk_recursive($array, $callBack, $objTmp); */
+        
+        $objTmp->aFlat  = Arr::Flatten($array);
+        
         return $objTmp->aFlat;
     }
 
