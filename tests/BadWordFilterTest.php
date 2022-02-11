@@ -2,10 +2,10 @@
 
 namespace JCrowe\BadWordFilter\Tests;
 
-use PHPUnit\Framework\TestCase;
-use JCrowe\BadWordFilter\BadWordFilter;
+use JCrowe\BadWordFilter\Facades\BadWordFilter;
 
-class BadWordFilterTest extends TestCase {
+class BadWordFilterTest extends TestCase
+{
 
 
     /**
@@ -17,7 +17,7 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter(['also_check' => ['bad word']]);
 
-        static::assertEquals('<h3>b******d</h3>some text', $filter->clean('<h3>bad word</h3>some text'));
+        $this->assertEquals('<h3>b******d</h3>some text', $filter->clean('<h3>bad word</h3>some text'));
     }
 
 
@@ -28,10 +28,10 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter();
 
-        static::assertEquals('s**t', $filter->clean('shit'));
-        static::assertEquals('f**k', $filter->clean('fuck'));
-        static::assertEquals('d******d', $filter->clean('dickhead'));
-        static::assertEquals('a**', $filter->clean('ass'));
+        $this->assertEquals('s**t', $filter->clean('shit'));
+        $this->assertEquals('f**k', $filter->clean('fuck'));
+        $this->assertEquals('d******d', $filter->clean('dickhead'));
+        $this->assertEquals('a**', $filter->clean('ass'));
     }
 
 
@@ -43,7 +43,7 @@ class BadWordFilterTest extends TestCase {
         $filter = new BadWordFilter(['also_check' => ['replace me']]);
         $replaceWith = '#!<>*&';
 
-        static::assertEquals($replaceWith, $filter->clean('replace me', $replaceWith));
+        $this->assertEquals($replaceWith, $filter->clean('replace me', $replaceWith));
     }
 
 
@@ -55,15 +55,15 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter(['also_check' => ['replace me']]);
 
-        static::assertEquals('#r********e', $filter->clean('#replace me'));
-        static::assertEquals('^r********e', $filter->clean('^replace me'));
-        static::assertEquals('%r********e', $filter->clean('%replace me'));
-        static::assertEquals('$r********e', $filter->clean('$replace me'));
-        static::assertEquals('@r********e', $filter->clean('@replace me'));
-        static::assertEquals('!r********e', $filter->clean('!replace me'));
-        static::assertEquals('r********e!', $filter->clean('replace me!'));
-        static::assertEquals('(r********e)', $filter->clean('(replace me)'));
-        static::assertEquals('<r********e>', $filter->clean('<replace me>'));
+        $this->assertEquals('#r********e', $filter->clean('#replace me'));
+        $this->assertEquals('^r********e', $filter->clean('^replace me'));
+        $this->assertEquals('%r********e', $filter->clean('%replace me'));
+        $this->assertEquals('$r********e', $filter->clean('$replace me'));
+        $this->assertEquals('@r********e', $filter->clean('@replace me'));
+        $this->assertEquals('!r********e', $filter->clean('!replace me'));
+        $this->assertEquals('r********e!', $filter->clean('replace me!'));
+        $this->assertEquals('(r********e)', $filter->clean('(replace me)'));
+        $this->assertEquals('<r********e>', $filter->clean('<replace me>'));
     }
 
     /**
@@ -74,7 +74,7 @@ class BadWordFilterTest extends TestCase {
         $filter = new BadWordFilter();
         $myString = 'I am an ASSociative professor';
 
-        static::assertEquals($myString, $filter->clean($myString));
+        $this->assertEquals($myString, $filter->clean($myString));
     }
 
 
@@ -87,56 +87,56 @@ class BadWordFilterTest extends TestCase {
         $filter = new BadWordFilter();
 
         // misspellings
-        static::assertEquals('ahole', $filter->clean('ahole'));
+        $this->assertEquals('ahole', $filter->clean('ahole'));
         // strictest
-        static::assertEquals('anus', $filter->clean('anus'));
+        $this->assertEquals('anus', $filter->clean('anus'));
         // very_strict
-        static::assertEquals('d***o', $filter->clean('dildo'));
+        $this->assertEquals('d***o', $filter->clean('dildo'));
         // lenient
-        static::assertEquals('b***h', $filter->clean('bitch'));
+        $this->assertEquals('b***h', $filter->clean('bitch'));
         // permissive
-        static::assertEquals('c**k', $filter->clean('cock'));
+        $this->assertEquals('c**k', $filter->clean('cock'));
 
         $filter = new BadWordFilter(['strictness' => 'misspellings']);
 
-        static::assertEquals('a***e', $filter->clean('ahole'));
-        static::assertEquals('a**s', $filter->clean('anus'));
-        static::assertEquals('d***o', $filter->clean('dildo'));
-        static::assertEquals('b***h', $filter->clean('bitch'));
-        static::assertEquals('c**k', $filter->clean('cock'));
+        $this->assertEquals('a***e', $filter->clean('ahole'));
+        $this->assertEquals('a**s', $filter->clean('anus'));
+        $this->assertEquals('d***o', $filter->clean('dildo'));
+        $this->assertEquals('b***h', $filter->clean('bitch'));
+        $this->assertEquals('c**k', $filter->clean('cock'));
 
         $filter = new BadWordFilter(['strictness' => 'strictest']);
 
-        static::assertEquals('ahole', $filter->clean('ahole'));
-        static::assertEquals('a**s', $filter->clean('anus'));
-        static::assertEquals('d***o', $filter->clean('dildo'));
-        static::assertEquals('b***h', $filter->clean('bitch'));
-        static::assertEquals('c**k', $filter->clean('cock'));
+        $this->assertEquals('ahole', $filter->clean('ahole'));
+        $this->assertEquals('a**s', $filter->clean('anus'));
+        $this->assertEquals('d***o', $filter->clean('dildo'));
+        $this->assertEquals('b***h', $filter->clean('bitch'));
+        $this->assertEquals('c**k', $filter->clean('cock'));
 
         $filter = new BadWordFilter(['strictness' => 'very_strict']);
 
-        static::assertEquals('ahole', $filter->clean('ahole'));
-        static::assertEquals('anus', $filter->clean('anus'));
-        static::assertEquals('d***o', $filter->clean('dildo'));
-        static::assertEquals('b***h', $filter->clean('bitch'));
-        static::assertEquals('c**k', $filter->clean('cock'));
+        $this->assertEquals('ahole', $filter->clean('ahole'));
+        $this->assertEquals('anus', $filter->clean('anus'));
+        $this->assertEquals('d***o', $filter->clean('dildo'));
+        $this->assertEquals('b***h', $filter->clean('bitch'));
+        $this->assertEquals('c**k', $filter->clean('cock'));
 
 
         $filter = new BadWordFilter(['strictness' => 'lenient']);
 
-        static::assertEquals('ahole', $filter->clean('ahole'));
-        static::assertEquals('anus', $filter->clean('anus'));
-        static::assertEquals('dildo', $filter->clean('dildo'));
-        static::assertEquals('b***h', $filter->clean('bitch'));
-        static::assertEquals('c**k', $filter->clean('cock'));
+        $this->assertEquals('ahole', $filter->clean('ahole'));
+        $this->assertEquals('anus', $filter->clean('anus'));
+        $this->assertEquals('dildo', $filter->clean('dildo'));
+        $this->assertEquals('b***h', $filter->clean('bitch'));
+        $this->assertEquals('c**k', $filter->clean('cock'));
 
         $filter = new BadWordFilter(['strictness' => 'permissive']);
 
-        static::assertEquals('ahole', $filter->clean('ahole'));
-        static::assertEquals('anus', $filter->clean('anus'));
-        static::assertEquals('dildo', $filter->clean('dildo'));
-        static::assertEquals('bitch', $filter->clean('bitch'));
-        static::assertEquals('c**k', $filter->clean('cock'));
+        $this->assertEquals('ahole', $filter->clean('ahole'));
+        $this->assertEquals('anus', $filter->clean('anus'));
+        $this->assertEquals('dildo', $filter->clean('dildo'));
+        $this->assertEquals('bitch', $filter->clean('bitch'));
+        $this->assertEquals('c**k', $filter->clean('cock'));
     }
 
 
@@ -147,8 +147,8 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter();
 
-        static::assertFalse($filter->isDirty('my very clean string'));
-        static::assertTrue($filter->isDirty('my very fucking dirty string'));
+        $this->assertFalse($filter->isDirty('my very clean string'));
+        $this->assertTrue($filter->isDirty('my very fucking dirty string'));
     }
 
 
@@ -159,11 +159,11 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter();
 
-        static::assertEquals([
+        $this->assertEquals([
             'fucking',
         ], $filter->getDirtyWordsFromString('my very fucking dirty string'));
 
-        static::assertEquals([
+        $this->assertEquals([
             'fucking',
             'shitty'
         ], $filter->getDirtyWordsFromString('my very fucking shitty dirty string'));
@@ -177,7 +177,7 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter();
 
-        static::assertEquals([
+        $this->assertEquals([
                 '1',
                 '2',
                 'filth',
@@ -192,7 +192,7 @@ class BadWordFilterTest extends TestCase {
     {
         $filter = new BadWordFilter();
 
-        static::assertEquals([
+        $this->assertEquals([
             'filth.dirty',
             'filth.clean.1',
         ], $filter->getDirtyKeysFromArray([
@@ -224,7 +224,7 @@ class BadWordFilterTest extends TestCase {
             ]
         ]);
 
-        static::assertEquals([
+        $this->assertEquals([
             'filth' => [
                 'dirty' => 'this s**t is dirty',
                 'clean' => [
@@ -255,6 +255,6 @@ class BadWordFilterTest extends TestCase {
 
         $filter = new BadWordFilter($options);
 
-        static::assertEquals('this is a b** string that has u**y and m**n words in it. fuck.', $filter->clean('this is a bad string that has ugly and mean words in it. fuck.'));
+        $this->assertEquals('this is a b** string that has u**y and m**n words in it. fuck.', $filter->clean('this is a bad string that has ugly and mean words in it. fuck.'));
     }
 }

@@ -10,19 +10,52 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/support": "9.0.2"
+        "illuminate/contracts": "^8.73"
     },
     "require-dev": {
-      "phpunit/phpunit": "^9.5",
-      "mockery/mockery": "^1.4"
+        "nunomaduro/collision": "^5.10",
+        "nunomaduro/larastan": "^1.0",
+        "orchestra/testbench": "^6.22",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.1",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
-        "psr-0": {
-            "JCrowe\\BadWordFilter\\": "src/"
+        
+        "psr-4": {
+            "JCrowe\\BadWordFilter\\": "src"
         }
     },
-    "minimum-stability": "stable"
+    "autoload-dev": {
+        "psr-4": {
+            "JCrowe\\BadWordFilter\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "JCrowe\\BadWordFilter\\Providers\\BadWordFilterServiceProvider"
+            ],
+            "aliases": {
+                "BadWordFilter": "JCrowe\\BadWordFilter\\Facades\\BadWordFilter"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
