@@ -2,8 +2,8 @@
 
 namespace JCrowe\BadWordFilter\Tests;
 
+use PHPUnit\Framework\TestCase;
 use JCrowe\BadWordFilter\BadWordFilter;
-use PHPUnit_Framework_TestCase as TestCase;
 
 class BadWordFilterTest extends TestCase {
 
