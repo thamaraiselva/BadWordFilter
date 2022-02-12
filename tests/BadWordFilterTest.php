@@ -2,7 +2,8 @@
 
 namespace JCrowe\BadWordFilter\Tests;
 
-use JCrowe\BadWordFilter\Facades\BadWordFilter;
+use JCrowe\BadWordFilter\Tests\TestCase;
+use JCrowe\BadWordFilter\JCrowe\BadWordFilter\BadWordFilter;
 
 class BadWordFilterTest extends TestCase
 {

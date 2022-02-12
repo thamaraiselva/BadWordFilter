@@ -1,5 +1,6 @@
 <?php 
-namespace JCrowe\BadWordFilter\Facades;
+namespace JCrowe\BadWordFilter\JCrowe\BadWordFilter\Facades;
+
 
 use Illuminate\Support\Facades\Facade;
 
@@ -9,7 +10,7 @@ use Illuminate\Support\Facades\Facade;
  *
  * @package JCrowe\BadWordFilter\Facades
  *
- * @see \JCrowe\BadWordFilter\BadWordFilter
+ * @see JCrowe\BadWordFilter\JCrowe\BadWordFilter\BadWordFilter
  *
  * @method static bool isDirty($input)
  * @method static array|string scrub($input, $replaceWith = '*')

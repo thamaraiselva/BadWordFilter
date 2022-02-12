@@ -1,10 +1,10 @@
 <?php
-namespace JCrowe\BadWordFilter;
+namespace JCrowe\BadWordFilter\Tests;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use JCrowe\BadWordFilter\Providers\BadWordFilterServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use VendorName\Skeleton\SkeletonServiceProvider;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use JCrowe\BadWordFilter\JCrowe\BadWordFilter\Providers\BadWordFilterServiceProvider;
 
 class TestCase extends Orchestra
 {
