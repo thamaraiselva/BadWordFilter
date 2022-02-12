@@ -5,6 +5,7 @@ use Orchestra\Testbench\TestCase as Orchestra;
 use VendorName\Skeleton\SkeletonServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use JCrowe\BadWordFilter\JCrowe\BadWordFilter\Providers\BadWordFilterServiceProvider;
+use Symfony\Component\Translation\Dumper\DumperInterface;
 
 class TestCase extends Orchestra
 {
@@ -12,9 +13,9 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-       /*  Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'JCrowe\\BadWordFilter\\Database\\Factories\\'.class_basename($modelName).'Factory'
-        ); */
+        /*  Factory::guessFactoryNamesUsing(
+             fn (string $modelName) => 'JCrowe\\BadWordFilter\\Database\\Factories\\'.class_basename($modelName).'Factory'
+         ); */
     }
 
     protected function getPackageProviders($app)
@@ -32,11 +33,9 @@ class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
-        // config()->set('database.default', 'testing');
-
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
+        
+        $migration = include __DIR__.'/../database/migrations/create_spam_keywords_table.php.stub';
         $migration->up();
-        */
+       
     }
 }
