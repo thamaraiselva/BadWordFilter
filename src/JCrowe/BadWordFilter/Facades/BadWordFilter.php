@@ -1,4 +1,5 @@
-<?php namespace JCrowe\BadWordFilter\Facades;
+<?php 
+namespace JCrowe\BadWordFilter\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
