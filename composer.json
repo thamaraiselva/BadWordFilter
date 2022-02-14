@@ -51,10 +51,7 @@
         "laravel": {
             "providers": [
                 "JCrowe\\BadWordFilter\\Providers\\BadWordFilterServiceProvider"
-            ],
-            "aliases": {
-                "BadWordFilter": "JCrowe\\BadWordFilter\\Facades\\BadWordFilter"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
