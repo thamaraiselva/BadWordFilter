@@ -27,7 +27,7 @@
     "autoload": {
         
         "psr-4": {
-            "JCrowe\\BadWordFilter\\": "src"
+            "": "src"
         }
     },
     "autoload-dev": {

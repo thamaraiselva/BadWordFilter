@@ -1,5 +1,5 @@
 <?php
-namespace JCrowe\BadWordFilter\JCrowe\BadWordFilter;
+namespace JCrowe\BadWordFilter;
 
 use Illuminate\Support\Arr;
 

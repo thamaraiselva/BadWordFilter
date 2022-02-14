@@ -4,7 +4,7 @@ namespace JCrowe\BadWordFilter\Tests;
 use Orchestra\Testbench\TestCase as Orchestra;
 use VendorName\Skeleton\SkeletonServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use JCrowe\BadWordFilter\JCrowe\BadWordFilter\Providers\BadWordFilterServiceProvider;
+use JCrowe\BadWordFilter\Providers\BadWordFilterServiceProvider;
 use Symfony\Component\Translation\Dumper\DumperInterface;
 
 class TestCase extends Orchestra

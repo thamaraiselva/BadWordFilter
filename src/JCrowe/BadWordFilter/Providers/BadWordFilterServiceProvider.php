@@ -1,5 +1,5 @@
 <?php
-namespace JCrowe\BadWordFilter\JCrowe\BadWordFilter\Providers;
+namespace JCrowe\BadWordFilter\Providers;
 
 use Spatie\LaravelPackageTools\Package;
 use Illuminate\Support\ServiceProvider;

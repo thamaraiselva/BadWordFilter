@@ -2,9 +2,9 @@
 
 namespace JCrowe\BadWordFilter\Tests;
 
+use JCrowe\BadWordFilter\BadWordFilter;
 use JCrowe\BadWordFilter\Tests\TestCase;
 use JCrowe\BadWordFilter\Models\SpamKeyword;
-use JCrowe\BadWordFilter\JCrowe\BadWordFilter\BadWordFilter;
 
 class SpamKeywordModelTest extends TestCase
 {
