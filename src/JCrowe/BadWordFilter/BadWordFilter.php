@@ -1,6 +1,7 @@
 <?php
 namespace JCrowe\BadWordFilter;
 
+use Throwable;
 use Illuminate\Support\Arr;
 
 class BadWordFilter
@@ -31,9 +32,9 @@ class BadWordFilter
      */
     private $isUsingCustomDefinedWordList = false;
 
-     /**
-     * Escaped separator characters
-     */
+    /**
+    * Escaped separator characters
+    */
     protected $escapedSeparatorCharacters = [
         '\s',
     ];
@@ -343,6 +344,10 @@ class BadWordFilter
         $profanities = [];
 
         foreach ($wordsToTest as $word) {
+            // logger('word', [$word]);
+            if (!is_string($word)) {
+                continue;
+            }
             $profanities[] = $this->generateProfanityExpression(
                 $word,
                 $this->characterExpressions,
@@ -351,15 +356,31 @@ class BadWordFilter
 
             // $word = preg_quote($word);
         }
-
+        // dump($profanities);
         foreach ($profanities as $profanity) {
-            if (preg_match($profanity, $string, $matchedString)) {
-                $badWords[] = $matchedString[0];
+            $matchedString =$this->getMatchedString($profanity, $string);
+            if ($matchedString === '') {
+                continue;
             }
+
+            // logger('is string', [is_string($matchedString), $matchedString]);
+            $badWords[] = $matchedString;
         }
         
 
         return $badWords;
+    }
+
+    private function getMatchedString($profanity, $string): string
+    {
+        try {
+            preg_match($profanity, $string, $matchedString);
+            
+            return mb_convert_encoding($matchedString[0], 'UTF-8', 'UTF-8');
+        } catch (Throwable $th) {
+            // logger('$profanity', [$profanity]);
+            return '';
+        }
     }
 
 
