@@ -5,7 +5,7 @@ use Illuminate\Support\Arr;
 
 class BadWordFilter
 {
-
+    const SEPARATOR_PLACEHOLDER = '{!!}';
 
     /**
      * The default configurations for this package
@@ -31,6 +31,13 @@ class BadWordFilter
      */
     private $isUsingCustomDefinedWordList = false;
 
+     /**
+     * Escaped separator characters
+     */
+    protected $escapedSeparatorCharacters = [
+        '\s',
+    ];
+
 
     /**
      * A list of bad words to check for
@@ -55,6 +62,135 @@ class BadWordFilter
      */
     private $regexEnd = '([-!$%^&*()_+|~=`{}\[\]:\";\'?,.\/])?\b/i';
 
+    /**
+     * Unescaped separator characters.
+     * @var array
+     */
+    protected $separatorCharacters = [
+        '@',
+        '#',
+        '%',
+        '&',
+        '_',
+        ';',
+        "'",
+        '"',
+        ',',
+        '~',
+        '`',
+        '|',
+        '!',
+        '$',
+        '^',
+        '*',
+        '(',
+        ')',
+        '-',
+        '+',
+        '=',
+        '{',
+        '}',
+        '[',
+        ']',
+        ':',
+        '<',
+        '>',
+        '?',
+        '.',
+        '/',
+    ];
+
+
+    /**
+     * List of potential character substitutions as a regular expression.
+     *
+     * @var array
+     */
+    protected $characterSubstitutions = [
+        '/a/' => [
+            'a',
+            '4',
+            '@',
+            'Á',
+            'á',
+            'À',
+            'Â',
+            'à',
+            'Â',
+            'â',
+            'Ä',
+            'ä',
+            'Ã',
+            'ã',
+            'Å',
+            'å',
+            'æ',
+            'Æ',
+            'α',
+            'Δ',
+            'Λ',
+            'λ',
+        ],
+        '/b/' => ['b', '8', '\\', '3', 'ß', 'Β', 'β'],
+        '/c/' => ['c', 'Ç', 'ç', 'ć', 'Ć', 'č', 'Č', '¢', '€', '<', '(', '{', '©'],
+        '/d/' => ['d', '\\', ')', 'Þ', 'þ', 'Ð', 'ð'],
+        '/e/' => ['e', '3', '€', 'È', 'è', 'É', 'é', 'Ê', 'ê', 'ë', 'Ë', 'ē', 'Ē', 'ė', 'Ė', 'ę', 'Ę', '∑'],
+        '/f/' => ['f', 'ƒ'],
+        '/g/' => ['g', '6', '9'],
+        '/h/' => ['h', 'Η'],
+        '/i/' => ['i', '!', '|', ']', '[', '1', '∫', 'Ì', 'Í', 'Î', 'Ï', 'ì', 'í', 'î', 'ï', 'ī', 'Ī', 'į', 'Į'],
+        '/j/' => ['j'],
+        '/k/' => ['k', 'Κ', 'κ'],
+        '/l/' => ['l', '!', '|', ']', '[', '£', '∫', 'Ì', 'Í', 'Î', 'Ï', 'ł', 'Ł'],
+        '/m/' => ['m'],
+        '/n/' => ['n', 'η', 'Ν', 'Π', 'ñ', 'Ñ', 'ń', 'Ń'],
+        '/o/' => [
+            'o',
+            '0',
+            'Ο',
+            'ο',
+            'Φ',
+            '¤',
+            '°',
+            'ø',
+            'ô',
+            'Ô',
+            'ö',
+            'Ö',
+            'ò',
+            'Ò',
+            'ó',
+            'Ó',
+            'œ',
+            'Œ',
+            'ø',
+            'Ø',
+            'ō',
+            'Ō',
+            'õ',
+            'Õ',
+        ],
+        '/p/' => ['p', 'ρ', 'Ρ', '¶', 'þ'],
+        '/q/' => ['q'],
+        '/r/' => ['r', '®'],
+        '/s/' => ['s', '5', '$', '§', 'ß', 'Ś', 'ś', 'Š', 'š'],
+        '/t/' => ['t', 'Τ', 'τ'],
+        '/u/' => ['u', 'υ', 'µ', 'û', 'ü', 'ù', 'ú', 'ū', 'Û', 'Ü', 'Ù', 'Ú', 'Ū'],
+        '/v/' => ['v', 'υ', 'ν'],
+        '/w/' => ['w', 'ω', 'ψ', 'Ψ'],
+        '/x/' => ['x', 'Χ', 'χ'],
+        '/y/' => ['y', '¥', 'γ', 'ÿ', 'ý', 'Ÿ', 'Ý'],
+        '/z/' => ['z', 'Ζ', 'ž', 'Ž', 'ź', 'Ź', 'ż', 'Ż'],
+    ];
+
+    /**
+     * List of profanities to test against.
+     *
+     * @var array
+     */
+    protected $profanities = [];
+    protected $separatorExpression;
+    protected $characterExpressions;
 
     /**
      * Create the object and set up the bad words list and
@@ -68,15 +204,88 @@ class BadWordFilter
         $this->defaults = include __DIR__ . '/../../config/config.php';
 
         if ($this->hasAlternateSource($options) || $this->hasAlternateSourceFile($options)) {
-
             $this->isUsingCustomDefinedWordList = true;
         }
 
         $this->config = array_merge($this->defaults, $options);
 
         $this->getBadWords();
+
+        $this->separatorExpression = $this->generateSeparatorExpression();
+        $this->characterExpressions = $this->generateCharacterExpressions();
     }
 
+
+    /**
+     * Generates the separator regular expression.
+     *
+     * @return string
+     */
+    private function generateSeparatorExpression()
+    {
+        return $this->generateEscapedExpression($this->separatorCharacters, $this->escapedSeparatorCharacters);
+    }
+
+    /**
+     * Generates the separator regex to test characters in between letters.
+     *
+     * @param array $characters
+     * @param array $escapedCharacters
+     * @param string $quantifier
+     *
+     * @return string
+     */
+    private function generateEscapedExpression(
+        array $characters = [],
+        array $escapedCharacters = [],
+        $quantifier = '*?'
+    ) {
+        $regex = $escapedCharacters;
+        foreach ($characters as $character) {
+            $regex[] = preg_quote($character, '/');
+        }
+
+        return '[' . implode('', $regex) . ']' . $quantifier;
+    }
+
+    /**
+     * Generate a regular expression for a particular word
+     *
+     * @param $word
+     * @param $characterExpressions
+     * @param $separatorExpression
+     *
+     * @return mixed
+     */
+    protected function generateProfanityExpression($word, $characterExpressions, $separatorExpression)
+    {
+        $expression = '/' . preg_replace(
+            array_keys($characterExpressions),
+            array_values($characterExpressions),
+            $word
+        ) . '/i';
+
+        return str_replace(self::SEPARATOR_PLACEHOLDER, $separatorExpression, $expression);
+    }
+
+    /**
+     * Generates a list of regular expressions for each character substitution.
+     *
+     * @return array
+     */
+    protected function generateCharacterExpressions()
+    {
+        $characterExpressions = [];
+        foreach ($this->characterSubstitutions as $character => $substitutions) {
+            $characterExpressions[$character] = $this->generateEscapedExpression(
+                $substitutions,
+                [],
+                '+?'
+            ) . self::SEPARATOR_PLACEHOLDER;
+        }
+
+        return $characterExpressions;
+    }
 
     /**
      * Check if the provided $input contains any bad words
@@ -131,16 +340,24 @@ class BadWordFilter
     {
         $badWords = [];
         $wordsToTest = $this->flattenArray($this->badWords);
+        $profanities = [];
 
         foreach ($wordsToTest as $word) {
+            $profanities[] = $this->generateProfanityExpression(
+                $word,
+                $this->characterExpressions,
+                $this->separatorExpression
+            );
 
-            $word = preg_quote($word);
+            // $word = preg_quote($word);
+        }
 
-            if (preg_match($this->buildRegex($word), $string, $matchedString)) {
-
+        foreach ($profanities as $profanity) {
+            if (preg_match($profanity, $string, $matchedString)) {
                 $badWords[] = $matchedString[0];
             }
         }
+        
 
         return $badWords;
     }
@@ -219,17 +436,13 @@ class BadWordFilter
 
                 // call recursively to handle multidimensional array,
                 $dirtyKeys[] = $this->findBadWordsInArray($value, $key);
-
             } else {
                 if (is_string($value)) {
-
                     if ($this->isADirtyString($value)) {
 
                         // bad word found, add the current key to the dirtyKeys array
                         $dirtyKeys[] = (string) $key;
-
                     }
-
                 } else {
                     continue;
                 }
@@ -253,7 +466,6 @@ class BadWordFilter
         $dirtyKeys = $this->findBadWordsInArray($array);
 
         foreach ($dirtyKeys as $key) {
-
             $this->cleanArrayKey($key, $array, $replaceWith);
         }
 
@@ -275,7 +487,6 @@ class BadWordFilter
         $keys = explode('.', $key);
 
         foreach ($keys as $k) {
-
             $array = &$array[$k];
         }
 
@@ -296,24 +507,18 @@ class BadWordFilter
         $words = $this->getDirtyWordsFromString($string);
 
         if ($words) {
-
             foreach ($words as $word) {
-
                 if (!strlen($word)) {
-
                     continue;
                 }
 
                 if ($replaceWith === '*') {
-
                     $fc = $word[0];
                     $lc = $word[strlen($word) - 1];
                     $len = strlen($word);
 
                     $newWord = $len > 3 ? $fc . str_repeat('*', $len - 2) . $lc : $fc . '**';
-
                 } else {
-
                     $newWord = $replaceWith;
                 }
 
@@ -360,7 +565,6 @@ class BadWordFilter
     private function getBadWords()
     {
         if (!$this->badWords) {
-
             switch ($this->config['source']) {
 
                 case 'file':
@@ -381,7 +585,6 @@ class BadWordFilter
             }
 
             if (!$this->isUsingCustomDefinedWordList()) {
-
                 switch ($this->config['strictness']) {
 
                     case 'permissive':
@@ -430,9 +633,7 @@ class BadWordFilter
             }
 
             if (!empty($this->config['also_check'])) {
-
                 if (!is_array($this->config['also_check'])) {
-
                     $this->config['also_check'] = [$this->config['also_check']];
                 }
 
@@ -516,13 +717,13 @@ class BadWordFilter
      */
     private function flattenArray($array)
     {
-       	$objTmp = (object)['aFlat' => []];
+        $objTmp = (object)['aFlat' => []];
         
-       /*  $callBack = function(&$v, $k, &$t) {
-	        $t->aFlat[] = $v;
-        };
+        /*  $callBack = function(&$v, $k, &$t) {
+             $t->aFlat[] = $v;
+         };
 
-        array_walk_recursive($array, $callBack, $objTmp); */
+         array_walk_recursive($array, $callBack, $objTmp); */
         
         $objTmp->aFlat  = Arr::Flatten($array);
         
@@ -550,5 +751,4 @@ class BadWordFilter
     {
         return !empty($options['source_file']) && $options['source_file'] !== $this->defaults['source_file'];
     }
-
 }
