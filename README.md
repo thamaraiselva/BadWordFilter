@@ -2,6 +2,11 @@ BadWordFilter
 =============
 
 [![Build Status](https://travis-ci.org/jcrowe206/BadWordFilter.svg?branch=master)](https://travis-ci.org/jcrowe206/BadWordFilter) [![Coverage Status](https://coveralls.io/repos/jcrowe206/BadWordFilter/badge.svg?branch=v2.1.2&service=github)](https://coveralls.io/github/jcrowe206/BadWordFilter?branch=v2.1.2)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/thamaraiselva/BadWordFilter.svg?style=flat-square)](https://packagist.org/packages/thamaraiselva/BadWordFilter)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/thamaraiselva/BadWordFilter/run-tests?label=tests)](https://github.com/thamaraiselva/BadWordFilter/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/thamaraiselva/BadWordFilter/Check%20&%20fix%20styling?label=code%20style)](https://github.com/thamaraiselva/BadWordFilter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/thamaraiselva/BadWordFilter.svg?style=flat-square)](https://packagist.org/packages/thamaraiselva/BadWordFilter)
+
 
 A bad word filter for php. Pass in a string or multidimensional array to check for the existence of a predefined list of bad words.
 Use the list that ships with the application or define your own custom blacklist. BadWordFilter only matches whole words (excluding symbols)
@@ -284,3 +289,29 @@ if ($badKeys = $filter->getDirtyKeysFromArray($arrayToCheck)) {
 }
 ```
 
+## Testing
+
+```bash
+composer test
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+
+## Security Vulnerabilities
+
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+
+## Credits
+
+- [palPalani](https://github.com/palpalani)
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

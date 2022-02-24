@@ -1,11 +1,22 @@
 {
     "name": "jcrowe/bad-word-filter",
     "description": "PHP Bad word filtering. Checks for the existence of a bad word in a string or array.",
+    "keywords": [
+        "palpalani",
+        "laravel",
+        "bad-word-filter"
+    ],
+    "homepage": "https://github.com/thamaraiselva/BadWordFilter",
     "license": "MIT",
     "authors": [
         {
             "name": "Jonathan Crowe",
             "email": "jcrowe206@gmail.com"
+        },
+        {
+            "name": "palPalani",
+            "email": "palani.p@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {
@@ -25,7 +36,7 @@
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {
-        
+
         "psr-4": {
             "": "src"
         }
