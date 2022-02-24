@@ -1,11 +1,10 @@
 <?php
+
 namespace JCrowe\BadWordFilter\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use JCrowe\BadWordFilter\Providers\BadWordFilterServiceProvider;
-use Symfony\Component\Translation\Dumper\DumperInterface;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
@@ -33,9 +32,8 @@ class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
-        
+
         $migration = include __DIR__.'/../database/migrations/create_spam_keywords_table.php.stub';
         $migration->up();
-       
     }
 }

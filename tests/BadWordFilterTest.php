@@ -2,13 +2,10 @@
 
 namespace JCrowe\BadWordFilter\Tests;
 
-use JCrowe\BadWordFilter\Tests\TestCase;
 use JCrowe\BadWordFilter\BadWordFilter;
 
 class BadWordFilterTest extends TestCase
 {
-
-
     /**
      * Test that you can clean an html wrapped string and return html that
      * has not been replaced with '*' as per bug report
@@ -20,7 +17,6 @@ class BadWordFilterTest extends TestCase
 
         $this->assertEquals('<h3>b******d</h3>some text', $filter->clean('<h3>bad word</h3>some text'));
     }
-
 
     /**
      * Default cleaning works
@@ -35,7 +31,6 @@ class BadWordFilterTest extends TestCase
         $this->assertEquals('a**', $filter->clean('ass'));
     }
 
-
     /**
      * Should prefer the supplied replacement string instead of asterisks
      */
@@ -46,7 +41,6 @@ class BadWordFilterTest extends TestCase
 
         $this->assertEquals($replaceWith, $filter->clean('replace me', $replaceWith));
     }
-
 
     /**
      * Words that have special characters touching them should be treated
@@ -77,7 +71,6 @@ class BadWordFilterTest extends TestCase
 
         $this->assertEquals($myString, $filter->clean($myString));
     }
-
 
     /**
      * Different words should be flagged based on the strictness level
@@ -140,7 +133,6 @@ class BadWordFilterTest extends TestCase
         $this->assertEquals('c**k', $filter->clean('cock'));
     }
 
-
     /**
      * Should be able to determine if a string has filth in it
      */
@@ -151,7 +143,6 @@ class BadWordFilterTest extends TestCase
         $this->assertFalse($filter->isDirty('my very clean string'));
         $this->assertTrue($filter->isDirty('my very fucking dirty string'));
     }
-
 
     /**
      * able to get a list of dirty words that are in a string
@@ -166,10 +157,9 @@ class BadWordFilterTest extends TestCase
 
         $this->assertEquals([
             'fucking',
-            'shitty'
+            'shitty',
         ], $filter->getDirtyWordsFromString('my very fucking shitty dirty string'));
     }
-
 
     /**
      * Can parse an array and get list of dirty strings and their array key
@@ -184,7 +174,6 @@ class BadWordFilterTest extends TestCase
                 'filth',
         ], $filter->getDirtyKeysFromArray(['this is a clean string', 'this shit is dirty', 'fuck yo couch', 'actually that is a nice couch!', 'filth' => 'another shitty string']));
     }
-
 
     /**
      * Should be able to access bad keys in a multidimensional array
@@ -201,12 +190,11 @@ class BadWordFilterTest extends TestCase
                 'dirty' => 'this shit is dirty',
                 'clean' => [
                     'this one is clean',
-                    'fuck it I lied, this one is dirty'
-                ]
-            ]
+                    'fuck it I lied, this one is dirty',
+                ],
+            ],
         ]));
     }
-
 
     /**
      * Should receive a cleaned array from the filter
@@ -220,9 +208,9 @@ class BadWordFilterTest extends TestCase
                 'dirty' => 'this shit is dirty',
                 'clean' => [
                     'this one is clean',
-                    'fuck it I lied, this one is dirty'
-                ]
-            ]
+                    'fuck it I lied, this one is dirty',
+                ],
+            ],
         ]);
 
         $this->assertEquals([
@@ -230,12 +218,11 @@ class BadWordFilterTest extends TestCase
                 'dirty' => 'this s**t is dirty',
                 'clean' => [
                     'this one is clean',
-                    'f**k it I lied, this one is dirty'
-                ]
-            ]
+                    'f**k it I lied, this one is dirty',
+                ],
+            ],
         ], $cleanedString);
     }
-
 
     /**
      * Using a custom bad words array should ignore the default
@@ -249,8 +236,8 @@ class BadWordFilterTest extends TestCase
             'bad_words_array' => [
                 'bad',
                 'ugly',
-                'mean'
-            ]
+                'mean',
+            ],
 
         ];
 

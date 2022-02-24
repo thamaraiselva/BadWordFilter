@@ -1,8 +1,9 @@
 <?php
+
 namespace JCrowe\BadWordFilter\Providers;
 
-use Spatie\LaravelPackageTools\Package;
 use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPackageTools\Package;
 
 class BadWordFilterServiceProvider extends ServiceProvider
 {
