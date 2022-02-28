@@ -12,8 +12,8 @@
  * and was compiled to be a good starting point but is by no means extensive
  *
  */
-return array(
-    'permissive' => array(
+return [
+    'permissive' => [
         'shit',
         'fuck',
         'fucker',
@@ -45,8 +45,8 @@ return array(
         'shitty',
         'shittiest',
         'shits',
-    ),
-    'lenient' => array(
+    ],
+    'lenient' => [
         'ass',
         'bitch',
         "bitch's",
@@ -60,15 +60,15 @@ return array(
         'dick heads',
         'dickhole',
         'dick hole',
-    ),
-    'strict' => array(
+    ],
+    'strict' => [
         'gurgle monster',
         'cum dumpster',
         'Carpet Muncher',
         'fatass',
         'fat-ass',
-    ),
-    'very_strict' => array(
+    ],
+    'very_strict' => [
         'slut',
         'Blow Job',
         'Clit',
@@ -76,8 +76,8 @@ return array(
         'jackoff',
         'jerk-off',
         'blow jobs',
-    ),
-    'strictest' => array(
+    ],
+    'strictest' => [
         'anus',
         'bastard',
         'bastards',
@@ -96,8 +96,8 @@ return array(
         'nutsack',
         'nuttsack',
 
-    ),
-    'misspellings' => array(
+    ],
+    'misspellings' => [
         'ahole',
         'ash0le',
         'ash0les',
@@ -145,5 +145,5 @@ return array(
         'jizm',
         'slutz',
         'assopedia',
-    ),
-);
+    ],
+];

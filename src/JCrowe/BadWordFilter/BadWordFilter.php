@@ -1,12 +1,13 @@
 <?php
+
 namespace JCrowe\BadWordFilter;
 
-use Throwable;
 use Illuminate\Support\Arr;
+use Throwable;
 
 class BadWordFilter
 {
-    const SEPARATOR_PLACEHOLDER = '{!!}';
+    public const SEPARATOR_PLACEHOLDER = '{!!}';
 
     /**
      * The default configurations for this package
@@ -216,7 +217,6 @@ class BadWordFilter
         $this->characterExpressions = $this->generateCharacterExpressions();
     }
 
-
     /**
      * Generates the separator regular expression.
      *
@@ -300,7 +300,6 @@ class BadWordFilter
         return is_array($input) ? $this->isADirtyArray($input) : $this->isADirtyString($input);
     }
 
-
     /**
      * Clean the provided $input and return the cleaned array or string
      *
@@ -313,7 +312,6 @@ class BadWordFilter
     {
         return is_array($input) ? $this->cleanArray($input, $replaceWith) : $this->cleanString($input, $replaceWith);
     }
-
 
     /**
      * Clean the $input (array or string) and replace bad words with $replaceWith
@@ -328,7 +326,6 @@ class BadWordFilter
     {
         return $this->scrub($input, $replaceWith);
     }
-
 
     /**
      * Get dirty words from the provided $string as an array of bad words
@@ -345,7 +342,7 @@ class BadWordFilter
 
         foreach ($wordsToTest as $word) {
             // logger('word', [$word]);
-            if (!is_string($word)) {
+            if (! is_string($word)) {
                 continue;
             }
             $profanities[] = $this->generateProfanityExpression(
@@ -358,7 +355,7 @@ class BadWordFilter
         }
         // dump($profanities);
         foreach ($profanities as $profanity) {
-            $matchedString =$this->getMatchedString($profanity, $string);
+            $matchedString = $this->getMatchedString($profanity, $string);
             if ($matchedString === '') {
                 continue;
             }
@@ -366,7 +363,7 @@ class BadWordFilter
             // logger('is string', [is_string($matchedString), $matchedString]);
             $badWords[] = $matchedString;
         }
-        
+
 
         return $badWords;
     }
@@ -375,14 +372,13 @@ class BadWordFilter
     {
         try {
             preg_match($profanity, $string, $matchedString);
-            
+
             return mb_convert_encoding($matchedString[0], 'UTF-8', 'UTF-8');
         } catch (Throwable $th) {
             // logger('$profanity', [$profanity]);
             return '';
         }
     }
-
 
     /**
      * Get an array of key/value pairs of dirty keys in the $input array
@@ -408,7 +404,6 @@ class BadWordFilter
         return $this->regexStart . '(' . $word . ')' . $this->regexEnd;
     }
 
-
     /**
      * Check if the current model is set up to use a custom defined word list
      *
@@ -418,7 +413,6 @@ class BadWordFilter
     {
         return $this->isUsingCustomDefinedWordList;
     }
-
 
     /**
      * Check if the $input array is dirty or not
@@ -432,7 +426,6 @@ class BadWordFilter
     {
         return $this->findBadWordsInArray($input) ? true : false;
     }
-
 
     /**
      * Return an array of bad words that were found in the $input array along with their keys
@@ -473,7 +466,6 @@ class BadWordFilter
         return $this->flattenArray($dirtyKeys);
     }
 
-
     /**
      * Clean all the bad words from the input $array
      *
@@ -492,7 +484,6 @@ class BadWordFilter
 
         return $array;
     }
-
 
     /**
      * Clean the string stored at $key in the $array
@@ -514,7 +505,6 @@ class BadWordFilter
         return $array = $this->cleanString($array, $replaceWith);
     }
 
-
     /**
      * Clean the input $string and replace the bad word with the $replaceWith value
      *
@@ -529,7 +519,7 @@ class BadWordFilter
 
         if ($words) {
             foreach ($words as $word) {
-                if (!strlen($word)) {
+                if (! strlen($word)) {
                     continue;
                 }
 
@@ -550,7 +540,6 @@ class BadWordFilter
         return $string;
     }
 
-
     /**
      * Check if the $input parameter is a dirty string
      *
@@ -562,7 +551,6 @@ class BadWordFilter
     {
         return $this->strContainsBadWords($input);
     }
-
 
     /**
      * Check if the input $string contains bad words
@@ -576,7 +564,6 @@ class BadWordFilter
         return $this->getDirtyWordsFromString($string) ? true : false;
     }
 
-
     /**
      * Set the bad words array to the model if not already set and return it
      *
@@ -585,43 +572,51 @@ class BadWordFilter
      */
     private function getBadWords()
     {
-        if (!$this->badWords) {
+        if (! $this->badWords) {
             switch ($this->config['source']) {
 
                 case 'file':
                     $this->badWords = $this->getBadWordsFromConfigFile();
+
                     break;
 
                 case 'array':
                     $this->badWords = $this->getBadWordsFromArray();
+
                     break;
 
                 case 'database':
                     $this->badWords = $this->getBadWordsFromDB();
+
                     break;
 
                 default:
                     throw new \Exception('Config source was not a valid type. Valid types are: file, database, cache');
+
                     break;
             }
 
-            if (!$this->isUsingCustomDefinedWordList()) {
+            if (! $this->isUsingCustomDefinedWordList()) {
                 switch ($this->config['strictness']) {
 
                     case 'permissive':
                         $this->badWords = $this->getBadWordsByKey(['permissive']);
+
                         break;
 
                     case 'lenient':
                         $this->badWords = $this->getBadWordsByKey(['permissive', 'lenient']);
+
                         break;
 
                     case 'strict':
                         $this->badWords = $this->getBadWordsByKey(['permissive', 'lenient', 'strict']);
+
                         break;
 
                     case 'very_strict':
                         $this->badWords = $this->getBadWordsByKey(['permissive', 'lenient', 'strict', 'very_strict']);
+
                         break;
 
                     case 'strictest':
@@ -630,8 +625,9 @@ class BadWordFilter
                             'lenient',
                             'strict',
                             'very_strict',
-                            'strictest'
+                            'strictest',
                         ]);
+
                         break;
 
                     case 'misspellings':
@@ -642,19 +638,21 @@ class BadWordFilter
                             'strict',
                             'very_strict',
                             'strictest',
-                            'misspellings'
+                            'misspellings',
                         ]);
+
                         break;
 
                     default:
                         $this->badWords = $this->getBadWordsByKey(['permissive', 'lenient', 'strict', 'very_strict']);
+
                         break;
 
                 }
             }
 
-            if (!empty($this->config['also_check'])) {
-                if (!is_array($this->config['also_check'])) {
+            if (! empty($this->config['also_check'])) {
+                if (! is_array($this->config['also_check'])) {
                     $this->config['also_check'] = [$this->config['also_check']];
                 }
 
@@ -664,7 +662,6 @@ class BadWordFilter
 
         return $this->badWords;
     }
-
 
     /**
      * Get subset of the bad words by an array of $keys
@@ -677,14 +674,13 @@ class BadWordFilter
     {
         $bw = [];
         foreach ($keys as $key) {
-            if (!empty($this->badWords[$key])) {
+            if (! empty($this->badWords[$key])) {
                 $bw[] = $this->badWords[$key];
             }
         }
 
         return $bw;
     }
-
 
     /**
      * Get the bad words list from a config file
@@ -701,7 +697,6 @@ class BadWordFilter
         throw new \Exception('Source was config but the config file was not set or contained an invalid path. Tried looking for it at: ' . $this->config['source_file']);
     }
 
-
     /**
      * Get the bad words from the array in the config
      *
@@ -710,13 +705,12 @@ class BadWordFilter
      */
     private function getBadWordsFromArray()
     {
-        if (!empty($this->config['bad_words_array']) && is_array($this->config['bad_words_array'])) {
+        if (! empty($this->config['bad_words_array']) && is_array($this->config['bad_words_array'])) {
             return $this->config['bad_words_array'];
         }
 
         throw new \Exception('Source is set to "array" but bad_words_array is either empty or not an array.');
     }
-
 
     /**
      * Get bad words from the database - not yet supported
@@ -728,7 +722,6 @@ class BadWordFilter
         throw new \Exception('Bad words from db is not yet supported. If you would like to see this feature please consider submitting a pull request.');
     }
 
-
     /**
      * Flatten the input $array
      *
@@ -739,18 +732,17 @@ class BadWordFilter
     private function flattenArray($array)
     {
         $objTmp = (object)['aFlat' => []];
-        
+
         /*  $callBack = function(&$v, $k, &$t) {
              $t->aFlat[] = $v;
          };
 
          array_walk_recursive($array, $callBack, $objTmp); */
-        
-        $objTmp->aFlat  = Arr::Flatten($array);
-        
+
+        $objTmp->aFlat = Arr::Flatten($array);
+
         return $objTmp->aFlat;
     }
-
 
     /**
      * @param array $options
@@ -759,9 +751,8 @@ class BadWordFilter
      */
     private function hasAlternateSource(array $options)
     {
-        return !empty($options['source']) && $options['source'] !== $this->defaults['source'];
+        return ! empty($options['source']) && $options['source'] !== $this->defaults['source'];
     }
-
 
     /**
      * @param array $options
@@ -770,6 +761,6 @@ class BadWordFilter
      */
     private function hasAlternateSourceFile(array $options)
     {
-        return !empty($options['source_file']) && $options['source_file'] !== $this->defaults['source_file'];
+        return ! empty($options['source_file']) && $options['source_file'] !== $this->defaults['source_file'];
     }
 }
