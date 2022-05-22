@@ -313,7 +313,7 @@ class BadWordFilter
      *
      * @return array|string
      */
-    public function clean(string|array $input, string $replaceWith = '*'):array|string
+    public function clean(string|array $input, string $replaceWith = '*'): array|string
     {
         return $this->scrub($input, $replaceWith);
     }
@@ -441,7 +441,7 @@ class BadWordFilter
     }
 
     /**
-     * Clean all the bad words from the input 
+     * Clean all the bad words from the input
      *
      * @return mixed
      */
