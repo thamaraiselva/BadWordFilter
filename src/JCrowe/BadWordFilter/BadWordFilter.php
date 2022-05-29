@@ -54,7 +54,7 @@ class BadWordFilter
      *
      * @var string
      */
-    private $regexStart = '/\b([-!$%^&*()_+|~=`{}\[\]:";\'?,.\/])?';
+    // private $regexStart = '/\b([-!$%^&*()_+|~=`{}\[\]:";\'?,.\/])?';
 
 
     /**
@@ -62,7 +62,7 @@ class BadWordFilter
      *
      * @var string
      */
-    private $regexEnd = '([-!$%^&*()_+|~=`{}\[\]:\";\'?,.\/])?\b/i';
+    // private $regexEnd = '([-!$%^&*()_+|~=`{}\[\]:\";\'?,.\/])?\b/i';
 
     /**
      * Unescaped separator characters.
@@ -190,9 +190,9 @@ class BadWordFilter
      *
      * @var array
      */
-    protected $profanities = [];
-    protected $separatorExpression;
-    protected $characterExpressions;
+    protected array $profanities = [];
+    protected string $separatorExpression;
+    protected array $characterExpressions;
 
     /**
      * Create the object and set up the bad words list and
@@ -222,7 +222,7 @@ class BadWordFilter
      *
      * @return string
      */
-    private function generateSeparatorExpression()
+    private function generateSeparatorExpression(): string
     {
         return $this->generateEscapedExpression($this->separatorCharacters, $this->escapedSeparatorCharacters);
     }
@@ -251,14 +251,9 @@ class BadWordFilter
 
     /**
      * Generate a regular expression for a particular word
-     *
-     * @param $word
-     * @param $characterExpressions
-     * @param $separatorExpression
-     *
      * @return mixed
      */
-    protected function generateProfanityExpression($word, $characterExpressions, $separatorExpression)
+    protected function generateProfanityExpression(string $word, array $characterExpressions, string $separatorExpression)
     {
         $expression = '/' . preg_replace(
             array_keys($characterExpressions),
@@ -304,37 +299,29 @@ class BadWordFilter
      * Clean the provided $input and return the cleaned array or string
      *
      * @param string|array $input
-     * @param string $replaceWith
+     * @param string|array $replaceWith
      *
      * @return array|string
      */
-    public function scrub($input, $replaceWith = '*')
+    public function scrub(string|array $input, string|array $replaceWith = '*')
     {
-        return is_array($input) ? $this->cleanArray($input, $replaceWith) : $this->cleanString($input, $replaceWith);
+        return is_array($input) ? $this->cleanArray($replaceWith, $input) : $this->cleanString($input, $replaceWith);
     }
 
     /**
      * Clean the $input (array or string) and replace bad words with $replaceWith
      *
-     * @param $input
-     * @param string $replaceWith
-     * @param array $options
-     *
      * @return array|string
      */
-    public function clean($input, $replaceWith = '*')
+    public function clean(string|array $input, string $replaceWith = '*'): array|string
     {
         return $this->scrub($input, $replaceWith);
     }
 
     /**
      * Get dirty words from the provided $string as an array of bad words
-     *
-     * @param $string
-     *
-     * @return array
      */
-    public function getDirtyWordsFromString($string)
+    public function getDirtyWordsFromString(string $string): array
     {
         $badWords = [];
         $wordsToTest = $this->flattenArray($this->badWords);
@@ -393,18 +380,6 @@ class BadWordFilter
     }
 
     /**
-     * Create the regular expression for the provided $word
-     *
-     * @param $word
-     *
-     * @return string
-     */
-    private function buildRegex($word)
-    {
-        return $this->regexStart . '(' . $word . ')' . $this->regexEnd;
-    }
-
-    /**
      * Check if the current model is set up to use a custom defined word list
      *
      * @return bool
@@ -418,11 +393,10 @@ class BadWordFilter
      * Check if the $input array is dirty or not
      *
      * @param array $input
-     * @param bool $previousKey
      *
      * @return bool
      */
-    private function isADirtyArray(array $input)
+    private function isADirtyArray(array $input): bool
     {
         return $this->findBadWordsInArray($input) ? true : false;
     }
@@ -467,14 +441,11 @@ class BadWordFilter
     }
 
     /**
-     * Clean all the bad words from the input $array
-     *
-     * @param $array
-     * @param $replaceWith
+     * Clean all the bad words from the input
      *
      * @return mixed
      */
-    private function cleanArray(array $array = [], $replaceWith)
+    private function cleanArray(string|array $replaceWith, array|string $array = [])
     {
         $dirtyKeys = $this->findBadWordsInArray($array);
 
@@ -488,13 +459,9 @@ class BadWordFilter
     /**
      * Clean the string stored at $key in the $array
      *
-     * @param $key
-     * @param $array
-     * @param $replaceWith
-     *
      * @return mixed
      */
-    private function cleanArrayKey($key, &$array, $replaceWith)
+    private function cleanArrayKey(string $key, array|string &$array, array|string $replaceWith)
     {
         $keys = explode('.', $key);
 
@@ -508,12 +475,9 @@ class BadWordFilter
     /**
      * Clean the input $string and replace the bad word with the $replaceWith value
      *
-     * @param $string
-     * @param $replaceWith
-     *
      * @return mixed
      */
-    private function cleanString($string, $replaceWith)
+    private function cleanString(string $string, array|string  $replaceWith)
     {
         $words = $this->getDirtyWordsFromString($string);
 
@@ -543,11 +507,9 @@ class BadWordFilter
     /**
      * Check if the $input parameter is a dirty string
      *
-     * @param $input
-     *
      * @return bool
      */
-    private function isADirtyString($input)
+    private function isADirtyString(string $input)
     {
         return $this->strContainsBadWords($input);
     }
@@ -555,11 +517,9 @@ class BadWordFilter
     /**
      * Check if the input $string contains bad words
      *
-     * @param $string
-     *
      * @return bool
      */
-    private function strContainsBadWords($string)
+    private function strContainsBadWords(string $string)
     {
         return $this->getDirtyWordsFromString($string) ? true : false;
     }
@@ -592,8 +552,6 @@ class BadWordFilter
 
                 default:
                     throw new \Exception('Config source was not a valid type. Valid types are: file, database, cache');
-
-                    break;
             }
 
             if (! $this->isUsingCustomDefinedWordList()) {
@@ -725,11 +683,9 @@ class BadWordFilter
     /**
      * Flatten the input $array
      *
-     * @param $array
-     *
      * @return mixed
      */
-    private function flattenArray($array)
+    private function flattenArray(array $array)
     {
         $objTmp = (object)['aFlat' => []];
 
