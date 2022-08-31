@@ -414,20 +414,17 @@ class BadWordFilter
         $dirtyKeys = [];
 
         foreach ($input as $key => $value) {
-
             // create the "dot" notation keys
             if ($previousKey !== false) {
                 $key = $previousKey . '.' . $key;
             }
 
             if (is_array($value)) {
-
                 // call recursively to handle multidimensional array,
                 $dirtyKeys[] = $this->findBadWordsInArray($value, $key);
             } else {
                 if (is_string($value)) {
                     if ($this->isADirtyString($value)) {
-
                         // bad word found, add the current key to the dirtyKeys array
                         $dirtyKeys[] = (string) $key;
                     }
@@ -534,7 +531,6 @@ class BadWordFilter
     {
         if (! $this->badWords) {
             switch ($this->config['source']) {
-
                 case 'file':
                     $this->badWords = $this->getBadWordsFromConfigFile();
 
@@ -556,7 +552,6 @@ class BadWordFilter
 
             if (! $this->isUsingCustomDefinedWordList()) {
                 switch ($this->config['strictness']) {
-
                     case 'permissive':
                         $this->badWords = $this->getBadWordsByKey(['permissive']);
 
@@ -605,7 +600,6 @@ class BadWordFilter
                         $this->badWords = $this->getBadWordsByKey(['permissive', 'lenient', 'strict', 'very_strict']);
 
                         break;
-
                 }
             }
 

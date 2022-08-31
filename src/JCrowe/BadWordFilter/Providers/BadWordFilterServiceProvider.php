@@ -19,7 +19,7 @@ class BadWordFilterServiceProvider extends ServiceProvider
             ->hasConfigFile('bad-word-filter')
             ->hasMigration('create_spam_keywords_table')
             // ->hasCommand(LovelyPackageCommand::class)
-            ;
+        ;
     }
 
     /**
