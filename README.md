@@ -4,7 +4,7 @@ BadWordFilter
 [![Build Status](https://travis-ci.org/jcrowe206/BadWordFilter.svg?branch=master)](https://travis-ci.org/jcrowe206/BadWordFilter) [![Coverage Status](https://coveralls.io/repos/jcrowe206/BadWordFilter/badge.svg?branch=v2.1.2&service=github)](https://coveralls.io/github/jcrowe206/BadWordFilter?branch=v2.1.2)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/thamaraiselva/BadWordFilter.svg?style=flat-square)](https://packagist.org/packages/thamaraiselva/BadWordFilter)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/thamaraiselva/BadWordFilter/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/thamaraiselva/BadWordFilter/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/thamaraiselva/BadWordFilter/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/thamaraiselva/BadWordFilter/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/thamaraiselva/BadWordFilter/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/thamaraiselva/BadWordFilter/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/thamaraiselva/BadWordFilter.svg?style=flat-square)](https://packagist.org/packages/thamaraiselva/BadWordFilter)
 
 
